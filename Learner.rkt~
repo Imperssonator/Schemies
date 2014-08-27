@@ -1,0 +1,27 @@
+#lang racket
+
+(define a (open-input-file "Republic.txt"))
+
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)
+(read a)

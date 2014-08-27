@@ -1,0 +1,83 @@
+(define (make-vertical length offset thickness)
+  
+  (define vertical-string "")
+  
+  (define (offset-butler i j k vertical-string length offset thickness)
+    (if (> k offset)
+        (thick-butler i 1 k  vertical-string length offset thickness)
+        (offset-butler i j (+ k 1) (string-append vertical-string " ") length offset thickness)
+               )
+        )
+  
+  (define (thick-butler i j k vertical-string length offset thickness)
+    (if (> j thickness)
+        (vertical-butler (+ i 1) 1 1 vertical-string length offset thickness)
+        (thick-butler i (+ j 1) k  (string-append vertical-string "#") length offset thickness)
+               )
+               )
+        
+  
+  (define (vertical-butler i j k vertical-string length offset thickness)
+    (if (> i length)
+        (begin (string-append vertical-string "\n") (display vertical-string))
+        (offset-butler i 1 1 (string-append vertical-string "\n") length offset thickness)
+        )
+    )
+  (vertical-butler 1 1 1 vertical-string length offset thickness)
+  )
+
+  
+
+
+
+(make-vertical 8 2 3)
+  
+
+(define (make-vert-downdiag length offset init-space final-space thickness)
+  (define space-slope (/ (- final-space init-space) length))
+  
+  (define vert-downdiag-string "")
+  
+  (define (diag-thick-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+    (if (> m thickness)
+        (vertical-butler (+ i 1) j k l m vert-downdiag-string length offset init-space final-space thickness)
+        (diag-thick-butler i j k l (+ m 1) (string-append vert-downdiag-string "#") length offset init-space final-space thickness)
+               )
+               )
+    
+  
+  (define (space-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+    (if (> l (+ init-space (* i space-slope)))
+        (diag-thick-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+        (space-butler i j k (+ l 1) m (string-append vert-downdiag-string " ") length offset init-space final-space thickness)
+        )
+    )
+  
+  (define (offset-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+    (if (> k offset)
+        (vert-thick-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+        (offset-butler i j (+ 1 k) l m (string-append vert-downdiag-string " ") length offset init-space final-space thickness)
+               )
+        )
+  
+  (define (vert-thick-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+    (if (> j thickness)
+        (space-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+        (vert-thick-butler i (+ j 1) k l m (string-append vert-downdiag-string "#") length offset init-space final-space thickness)
+               )
+               )
+        
+  
+  (define (vertical-butler i j k l m vert-downdiag-string length offset init-space final-space thickness)
+    (if (= i length)
+        (begin (string-append vert-downdiag-string "\n") (display vert-downdiag-string))
+        (offset-butler i 1 1 1 1 (string-append vert-downdiag-string "\n") length offset init-space final-space thickness)
+        )
+    )
+  
+  (vertical-butler 0 1 1 1 1 vert-downdiag-string length offset init-space final-space thickness)
+  )
+
+(make-vert-downdiag 10 0 0 10 2)
+
+(make-vert-downdiag 20 1 5 10 2)

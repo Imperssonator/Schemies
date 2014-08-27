@@ -1,0 +1,83 @@
+;; Author: 
+
+;; PROBLEM 1: Write your answers here as a comment
+
+;; PROBLEM 2:
+;; Part 1: Your function
+
+;; Part 2: How close is your result to e? (Write as a comment)
+
+;; Part 3: Your function for sin(x)
+
+;; PROBLEM 3:
+(define (make-banner in-string  width height)    
+  (define thickness 2)
+  (define inset (floor (/ width 2)) )
+  ;; Make a horizontal line
+  (define (make-horizontal thick width the-char)
+    (define one-horizontal (string-append (make-string width the-char) "\n"))
+    (define (mh-helper thick thing)
+      (if (= thick 1)           thing
+          (string-append thing (mh-helper (- thick 1) thing))
+          ))    
+    (mh-helper thick one-horizontal)
+    )
+  ;; Make a vertical line
+  (define (make-vertical thickness height inset in-char)
+    (define one-vertical 
+      (string-append (string-append (make-string inset #\ ) 
+                                    (make-string thickness in-char)) "\n"))
+    (define (mv-helper height thing)
+      (if (= height 1) thing
+          (string-append thing (mv-helper (- height 1) thing))
+          )
+      ) 
+    (mv-helper height one-vertical) 
+    )
+  ;; Call the function that draws the right letter
+  (define  (make-banner-character in-char)
+    (display in-char)
+    ;; You'll need to change this
+    (cond    
+        ( (char=? in-char #\I) (make-cap-I) )
+        ( (char=? in-char #\J) (make-cap-J) )
+        ( #t   "unknown character in input string")
+      )     
+    )
+  ;; Make an I
+  (define (make-cap-I)
+    (display "inside makecapI ")
+    (define top-or-bottom (make-horizontal thickness width #\* ))
+    (define middle (make-vertical thickness height inset #\*))
+    (string-append (string-append (string-append  top-or-bottom middle) top-or-bottom) "\n")
+  )
+  ;; Make a J
+  (define (make-cap-J)
+    (display "inside makecap J")
+    (define top (make-horizontal thickness width #\* ))
+    (define bottom (make-horizontal thickness inset #\* ))
+    (define middle (make-vertical thickness height inset #\*))
+    (string-append (string-append (string-append  top middle) bottom) "\n")
+  )
+  ;; Add more letters here
+  ;; ...
+  ;; Make an entire string of characters
+  (define (mb-helper in-string)
+    (if (= (string-length in-string) 0)
+        "\n\ndone"
+        (string-append 
+           (make-banner-character (string-ref in-string 0))
+           (mb-helper (substring in-string 1 (string-length in-string)))
+         )
+    )
+  )
+  ;; defensive tests
+  ;; what about zero length string?
+  (if (and (string? in-string) (<= width 50) (<= height 75))
+      (mb-helper in-string)
+      "error in make-banner input"  )
+  )
+
+;; Code to run your make-banner
+(define test1 (make-banner "IJIJ"  25 15) )
+(display test1)

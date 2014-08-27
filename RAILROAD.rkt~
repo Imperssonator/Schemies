@@ -1,0 +1,24 @@
+;; Nils Persson
+
+(define (assoc-store key value a-list)
+  
+  ;;(display key) (newline) (display value) (newline)
+  
+  (define (butler top bottom)
+    
+    ;;(display+ top) (display+ bottom)
+    
+    (if (null? bottom)
+        (cons top '())
+        (cons top (butler (car bottom) (cdr bottom)))
+        )
+    )
+  (butler (list key value) a-list)
+  )
+
+(define (make-new-railroad founding-year)
+  (display founding-year)
+  (list (assoc-store "type" "railroad data" (assoc-store "founding year" founding-year '())))
+  )
+
+(define (add-station

@@ -1,0 +1,36 @@
+(define (factorial n)
+  (define (butler product counter max-count)
+    (if (> counter max-count)
+        product
+        (butler (* product counter) (+ counter 1) max-count)
+        )
+    )
+  (butler 1 1 n)
+  )
+
+(define (n-power n)
+  (define (butler product counter max-count)
+    (if (> counter max-count)
+        product
+        (butler (* product max-count) (+ counter 1) max-count)
+        )
+    )
+  (butler 1 1 n)
+  )
+
+(define (fact-vs-fiction k)
+  (define (butler counter max-count)
+  (if (> counter max-count)
+      "whoa."
+      (begin (display (factorial counter))
+             (display " ")
+             (display (n-power counter))
+             (display "\n")
+             (butler (+ counter 1) max-count)
+             )
+      )
+    )
+  (butler 1 k)
+  )
+
+(fact-vs-fiction 9)
